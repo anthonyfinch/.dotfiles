@@ -125,7 +125,6 @@ export PATH="/usr/local/heroku/bin:$PATH"
 
 if [ $TERM != "screen-256color" ] && [  $TERM != "screen" ]; then
 	TERM=screen-256color-bce	
-	tmux attach || tmux new; exit
 fi
 
 export EDITOR='vim'
@@ -135,3 +134,8 @@ export EDITOR='vim'
 source /usr/share/ruby-rvm/gems/ruby-1.9.2-p180/bin/tmuxinator_completion
 
 eval $(dircolors -b  $HOME/.dir_colors)
+
+export LD_LIBRARY_PATH=/usr/local/lib
+
+alias v='vim'
+alias g='git'
