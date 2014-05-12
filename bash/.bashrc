@@ -13,8 +13,8 @@ HISTCONTROL=ignoreboth
 shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
+HISTSIZE=10000
+HISTFILESIZE=20000
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -54,7 +54,7 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+	PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]$(__git_ps1 " (%s)") $ '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
@@ -71,7 +71,7 @@ esac
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    test -r ~/.bashed/dircolors-solarized/dircolors.ansi-dark && eval "$(dircolors -b ~/.bashed/dircolors-solarized/dircolors.ansi-dark)" || eval "$(dircolors -b)"
     alias ls='ls --color=auto'
     #alias dir='dir --color=auto'
     #alias vdir='vdir --color=auto'
@@ -81,15 +81,6 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-# some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
-
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
@@ -97,6 +88,10 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
+fi
+
+if [ -f ~/.bash_functions ]; then
+    . ~/.bash_functions
 fi
 
 # enable programmable completion features (you don't need to enable
@@ -108,34 +103,42 @@ fi
 
 shopt -s cdspell
 
-PATH=$PATH:/opt/lampp/bin:/opt/vagrant/bin:/home/tiger/.bin:/home/tiger/.todo
-source /etc/bash_completion.d/password-store
+# # PATH=$PATH:/opt/lampp/bin:/opt/vagrant/bin:/home/tiger/.bin:/home/tiger/.todo:.cabal-sandbox/bin
+# # source /etc/bash_completion.d/password-store
+#  
+# # ### Added by the Heroku Toolbelt
+# # export PATH="/usr/local/heroku/bin:$PATH"
+# # 
+# # export PATH="$HOME/.cabal/bin:$PATH"
 
-POMLOG=/home/tiger/.pom.log
 
-export POMLOG
+# # [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
+# # 
+# # source /usr/share/ruby-rvm/gems/ruby-1.9.2-p180/bin/tmuxinator_completion
+# # 
+# # eval $(dircolors -b  $HOME/.dir_colors)
+# # 
+# # export LD_LIBRARY_PATH=/usr/local/lib
 
-export WORKON_HOME=~/Venvs
-source /usr/local/bin/virtualenvwrapper.sh
+if [ -f ~/.completions/git-completion.bash ] && ! shopt -oq posix; then
+    . ~/.completions/git-completion.bash
+fi
 
-### Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
+export EDITOR='vim'
+set -o vi
 
-[[ -s "/usr/share/ruby-rvm/scripts/rvm" ]] && source "/usr/share/ruby-rvm/scripts/rvm"
 
+# For tmux
 if [ $TERM != "screen-256color" ] && [  $TERM != "screen" ]; then
 	TERM=screen-256color-bce	
 fi
 
-export EDITOR='vim'
 
-[[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
+# Virtualenvwrapper
+WORKON_HOME=~/.virtualenvs
+source /usr/local/bin/virtualenvwrapper.sh
 
-source /usr/share/ruby-rvm/gems/ruby-1.9.2-p180/bin/tmuxinator_completion
 
-eval $(dircolors -b  $HOME/.dir_colors)
-
-export LD_LIBRARY_PATH=/usr/local/lib
-
-alias v='vim'
-alias g='git'
+# Git Prompt 
+GIT_PROMPT_ONLY_IN_REPO=1
+source ~/.bashed/bash-git-prompt/gitprompt.sh
