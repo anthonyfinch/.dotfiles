@@ -2,6 +2,7 @@
 	name = Anthony Finch
 	email = actionspeakslouder@gmail.com
 [alias]
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 	ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
 	ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
 	lds = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short 
@@ -18,5 +19,8 @@
 	br = branch 
 	diff = diff --word-diff
 	dc = diff --cached
+ 	trim = !bash -c 'git branch --merged | grep -v \\* | xargs -n 1 git branch -d'
 [core]
 	excludesfile = ~/.gitignore
+[rerere]
+	enabled = true
