@@ -122,6 +122,7 @@ shopt -s cdspell
 
 if [ -f ~/.completions/git-completion.bash ] && ! shopt -oq posix; then
     . ~/.completions/git-completion.bash
+		__git_complete g __git_main
 fi
 
 export EDITOR='vim'
