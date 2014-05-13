@@ -8,6 +8,7 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 
 alias v='vim'
 alias g='git'
+__git_complete g __git_main
 
 alias tmux='tmux -2'
 
