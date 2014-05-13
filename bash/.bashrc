@@ -134,6 +134,10 @@ if [ $TERM != "screen-256color" ] && [  $TERM != "screen" ]; then
 fi
 
 
+# Cabal
+export PATH=$HOME/.cabal/bin:$PATH
+
+
 # Virtualenvwrapper
 WORKON_HOME=~/.virtualenvs
 source /usr/local/bin/virtualenvwrapper.sh
