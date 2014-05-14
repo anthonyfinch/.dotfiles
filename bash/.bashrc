@@ -144,11 +144,15 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 
 # Rvm
-source $HOME/.rvm/scripts/rvm
+if [ -f $HOME/.rvm/scripts/rvm ]; then
+	source $HOME/.rvm/scripts/rvm
+fi
 
 
 # Nvm
-source $HOME/.nvm/nvm.sh
+if [ -f $HOME/.nvm/nvm.sh ]; then
+	source $HOME/.nvm/nvm.sh
+fi
 
 
 # Git Prompt 
