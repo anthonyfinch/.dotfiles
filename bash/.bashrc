@@ -109,7 +109,6 @@ shopt -s cdspell
 # # ### Added by the Heroku Toolbelt
 # # export PATH="/usr/local/heroku/bin:$PATH"
 # # 
-# # export PATH="$HOME/.cabal/bin:$PATH"
 
 
 # # [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
@@ -142,6 +141,14 @@ export PATH=$HOME/.cabal/bin:$PATH
 # Virtualenvwrapper
 WORKON_HOME=~/.virtualenvs
 source /usr/local/bin/virtualenvwrapper.sh
+
+
+# Rvm
+source $HOME/.rvm/scripts/rvm
+
+
+# Nvm
+source $HOME/.nvm/nvm.sh
 
 
 # Git Prompt 
