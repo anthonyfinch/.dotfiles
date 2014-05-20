@@ -134,6 +134,10 @@ if [ $TERM != "screen-256color" ] && [  $TERM != "screen" ]; then
 fi
 
 
+# Scripts and local apps
+export PATH=$HOME/.bin:$PATH
+
+
 # Cabal
 export PATH=$HOME/.cabal/bin:$PATH
 
