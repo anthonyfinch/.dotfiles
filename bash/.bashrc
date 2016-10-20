@@ -163,7 +163,7 @@ export PATH=$HOME/.cabal/bin:$PATH
 
 # Virtualenvwrapper
 WORKON_HOME=~/.virtualenvs
-source /usr/local/bin/virtualenvwrapper.sh
+# source /usr/local/bin/virtualenvwrapper.sh
 
 
 # Rvm
