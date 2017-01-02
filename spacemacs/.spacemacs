@@ -18,21 +18,18 @@ values."
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
    '(
-     ;; ----------------------------------------------------------------
-     ;; Example of useful layers you may want to use right away.
-     ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
-     ;; <M-m f e R> (Emacs style) to install them.
-     ;; ----------------------------------------------------------------
+     purescript
+     csv
+     (javascript :variables
+                 tern-command '("node" "/home/tiger/.nvm/versions/node/v7.1.0/bin/tern"))
+     nginx
+     html
      auto-completion
-     ;; better-defaults
      emacs-lisp
      git
      markdown
+     ;; jsslime
      org
-     ;; (shell :variables
-     ;;        shell-default-height 30
-     ;;        shell-default-position 'bottom)
-     ;; spell-checking
      syntax-checking
      version-control
      python
@@ -42,9 +39,9 @@ values."
               haskell-completion-backend 'intero
               haskell-enable-hindent-style "chris-done")
      csharp
+     (org :variables org-enable-reveal-js-support t)
+     terraform
      elm
-     ;; intero
-     ;; themes-megapack
      nim
      typescript
      )
@@ -262,20 +259,21 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
+  ;; Javascript config
+  (setq-default js2-basic-offset 2)
+
   ;; Browser config
   (setq browse-url-browser-function 'browse-url-generic
-        browse-url-generic-program "chromium")
+        browse-url-generic-program "chromium-browser")
 
   ;; Org mode config
+  (eval-after-load 'org
+    '(require 'ox-md nil t))
 	(with-eval-after-load 'org
     (setq org-agenda-files (quote ("~/org")))
     (setq org-default-notes-file "~/org/inbox.org")
     (setq org-refile-targets (quote ((nil :maxlevel . 9)
                                      (org-agenda-files :maxlevel . 9)))) 
-
-    (setq org-mobile-directory "~/mobile_org")
-
-    ;; (setq org-agenda-sorting-strategy)
 
     (setq org-capture-templates
           (quote (("t" "todo" entry (file+headline "" "Tasks")
@@ -352,9 +350,13 @@ you should place your code here."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(evil-want-Y-yank-to-eol t)
+ '(js2-global-externs (quote ("Phaser")))
+ '(js2-include-node-externs t)
  '(package-selected-packages
    (quote
     (hide-comnt helm-purpose window-purpose imenu-list flycheck-elm elm-mode yapfify yaml-mode ws-butler window-numbering which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tide spacemacs-theme spaceline solarized-theme smeargle restart-emacs rainbow-delimiters quelpa pyvenv pytest pyenv-mode py-isort popwin pip-requirements persp-mode pcre2el paradox orgit org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file omnisharp nim-mode neotree move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum live-py-mode linum-relative link-hint jinja2-mode intero info+ indent-guide ido-vertical-mode hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-gitignore helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag haskell-snippets google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md flycheck-pos-tip flycheck-nim flycheck-haskell flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu elisp-slime-nav dumb-jump diff-hl define-word cython-mode company-statistics company-ghci company-ghc company-cabal company-anaconda column-enforce-mode cmm-mode clean-aindent-mode auto-yasnippet auto-highlight-symbol auto-compile ansible-doc ansible aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell)))
+ '(psc-ide-add-import-on-completion t t)
+ '(psc-ide-rebuild-on-save nil t)
  '(safe-local-variable-values (quote ((cmake-ide-build-dir . ".")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
