@@ -18,6 +18,7 @@ values."
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
    '(
+     restclient
      purescript
      csv
      (javascript :variables
@@ -29,7 +30,6 @@ values."
      git
      markdown
      ;; jsslime
-     org
      syntax-checking
      version-control
      python
@@ -39,7 +39,8 @@ values."
               haskell-completion-backend 'intero
               haskell-enable-hindent-style "chris-done")
      csharp
-     (org :variables org-enable-reveal-js-support t)
+     (org :variables
+          org-enable-reveal-js-support t)
      terraform
      elm
      nim
@@ -267,6 +268,8 @@ you should place your code here."
         browse-url-generic-program "chromium-browser")
 
   ;; Org mode config
+  (add-hook 'org-mode-hook 'turn-on-auto-fill)
+  (add-hook 'org-mode-hook #'aggressive-indent-mode)
   (eval-after-load 'org
     '(require 'ox-md nil t))
 	(with-eval-after-load 'org
@@ -278,6 +281,8 @@ you should place your code here."
     (setq org-capture-templates
           (quote (("t" "todo" entry (file+headline "" "Tasks")
                    "* TODO %?\n%U\n%a\n")
+                  ("j" "journal entry" entry (file+datetree "~/org/journal.org")
+                   "* %<%r> Event:%?\n\n %i\n\n From %a" :empty-lines 1)
                   ("n" "note" entry (file+headline "" "Notes")
                    "* %?\n%U\n%a\n"))))
 
@@ -297,14 +302,7 @@ you should place your code here."
              (todo "NEXT"
                    ((org-agenda-overriding-header "Next Actions")
                     (org-agenda-files '("~/org/trialreach.org"))))
-             ))
-            ("e" "Home"
-             ((agenda ""
-                      ((org-agenda-files '("~/org/personal.org"))))
-              (todo "NEXT"
-                    ((org-agenda-overriding-header "Next Actions")
-                     (org-agenda-files '("~/org/personal.org"))))
-              )))
+             )))
           )
 
     (setq org-tag-alist (quote ((:startgroup)
@@ -325,18 +323,15 @@ you should place your code here."
 
     (add-hook 'org-babel-after-execute-hook 'org-display-inline-images)
 
-    (defun org-agenda-show-work-view (&optional arg)
-      (interactive "P")
-      (org-agenda arg "w"))
-
     (defun org-agenda-show-all-view (&optional arg)
       (interactive "P")
       (org-agenda arg "q"))
 
+
+    (setq projectile-enable-caching t)
 	)
 
   (spacemacs/set-leader-keys "oc" 'org-capture)
-  (spacemacs/set-leader-keys "ow" 'org-agenda-show-work-view)
   (spacemacs/set-leader-keys "oo" 'org-agenda-show-all-view)
   (setq haskell-compile-cabal-build-command "stack build")
 
