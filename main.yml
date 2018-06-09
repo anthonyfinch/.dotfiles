@@ -1,0 +1,101 @@
+---
+
+- hosts: 127.0.0.1
+  tasks:
+    - name: update apt
+      become: yes
+      apt:
+        update_cache: yes
+        cache_valid_time: 300
+    - name: install core packages
+      become: yes
+      apt:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - git
+        - vim
+        - emacs
+        - pass
+        - feh
+        - tmux
+        - xmonad
+        - xmobar
+        - compton
+        - i3lock
+        - tint2
+        - synapse
+        - gnome-tweak-tool
+        - redshift-gtk
+        - virtualbox
+        - vagrant
+    - name: install spotify
+      become: true
+      command: snap install spotify
+    - name: remove default user dirs
+      file:
+        path: ~/{{ item }}
+        state: absent
+      with_items:
+       - Desktop
+       - Documents
+       - Downloads
+       - Music
+       - Pictures
+       - Templates
+       - Public
+       - Examples
+    - name: create required directories
+      file:
+        path: ~/{{ item }}
+        state: directory
+      with_items:
+       - desktop
+       - documents
+       - downloads
+       - music
+       - dev
+       - pictures
+       - templates
+       - public
+       - .xmonad
+       - .config/dunst
+    - name: install spacemacs
+      git: 
+        repo: https://github.com/syl20bnr/spacemacs
+        dest:  ~/.emacs.d
+    - name: install pyenv
+      git: 
+        repo: https://github.com/pyenv/pyenv
+        dest:  ~/.pyenv
+    - name: install pyenv packages (for building pythons)
+      become: yes
+      apt:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - libreadline-dev
+        - libssl-dev
+        - libsqlite3-dev
+        - libbz2-dev
+    - name: install general dotfiles
+      file:
+        src: "{{ playbook_dir }}/files/{{ item.src }}"
+        dest: "~/{{ item.dest }}"
+        state: link
+      with_items:
+        - { src: "user-dirs.dirs", dest: ".config/user-dirs.dirs" }
+        - { src: ".spacemacs", dest: ".spacemacs" }
+        - { src: ".gitconfig", dest: ".gitconfig" }
+        - { src: ".gitignore", dest: ".gitignore" }
+        - { src: ".ghci", dest: ".ghci" }
+        - { src: ".tmux.conf", dest: ".tmux.conf" }
+        - { src: ".vimrc", dest: ".vimrc" }
+        - { src: ".bashrc", dest: ".bashrc" }
+        - { src: ".bash_aliases", dest: ".bash_aliases" }
+        - { src: ".bash_profile", dest: ".bash_profile" }
+        - { src: ".inputrc", dest: ".inputrc" }
+        - { src: "dunstrc", dest: ".config/dunst/dunstrc" }
+        - { src: ".xmonad/xmonad.hs", dest: ".xmonad/xmonad.hs" }
+        - { src: ".xmonad/xmobarrc", dest: ".xmonad/xmobarrc" }
+        - { src: ".xmonad/start-xmonad", dest: ".xmonad/start-xmonad" }

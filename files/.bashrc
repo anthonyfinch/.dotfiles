@@ -16,8 +16,8 @@ HISTCONTROL=ignoreboth
 shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=10000
-HISTFILESIZE=20000
+HISTSIZE=100000
+HISTFILESIZE=200000
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -52,12 +52,12 @@ if [ -n "$force_color_prompt" ]; then
 	# a case would tend to support setf rather than setaf.)
 	color_prompt=yes
     else
-	color_prompt=
+	color_prompt=yes
     fi
 fi
 
 if [ "$color_prompt" = yes ]; then
-	PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]$(__git_ps1 " (%s)") $ '
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
@@ -74,7 +74,7 @@ esac
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.bashed/dircolors-solarized/dircolors.ansi-dark && eval "$(dircolors -b ~/.bashed/dircolors-solarized/dircolors.ansi-dark)" || eval "$(dircolors -b)"
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls='ls --color=auto'
     #alias dir='dir --color=auto'
     #alias vdir='vdir --color=auto'
@@ -105,10 +105,6 @@ if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
-if [ -f ~/.bash_functions ]; then
-    . ~/.bash_functions
-fi
-
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
@@ -119,65 +115,3 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-
-shopt -s cdspell
-
-# # PATH=$PATH:/opt/lampp/bin:/opt/vagrant/bin:/home/tiger/.bin:/home/tiger/.todo:.cabal-sandbox/bin
-# # source /etc/bash_completion.d/password-store
-#  
-# # ### Added by the Heroku Toolbelt
-# # export PATH="/usr/local/heroku/bin:$PATH"
-# # 
-
-
-# # [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
-# # 
-# # source /usr/share/ruby-rvm/gems/ruby-1.9.2-p180/bin/tmuxinator_completion
-# # 
-# # eval $(dircolors -b  $HOME/.dir_colors)
-# # 
-# # export LD_LIBRARY_PATH=/usr/local/lib
-
-if [ -f ~/.completions/git-completion.bash ] && ! shopt -oq posix; then
-    . ~/.completions/git-completion.bash
-		__git_complete g __git_main
-fi
-
-export EDITOR='vim'
-set -o vi
-
-
-# For tmux
-if [ $TERM != "screen-256color" ] && [  $TERM != "screen" ]; then
-	TERM=screen-256color-bce	
-fi
-
-
-# Scripts and local apps
-export PATH=$HOME/.bin:$PATH
-
-
-# Cabal
-export PATH=$HOME/.cabal/bin:$PATH
-
-
-# Virtualenvwrapper
-WORKON_HOME=~/.virtualenvs
-# source /usr/local/bin/virtualenvwrapper.sh
-
-
-# Rvm
-if [ -f $HOME/.rvm/scripts/rvm ]; then
-	source $HOME/.rvm/scripts/rvm
-fi
-
-
-# Nvm
-if [ -f $HOME/.nvm/nvm.sh ]; then
-	source $HOME/.nvm/nvm.sh
-fi
-
-
-# Git Prompt 
-GIT_PROMPT_ONLY_IN_REPO=1
-source ~/.bashed/bash-git-prompt/gitprompt.sh

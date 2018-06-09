@@ -1,3 +1,0 @@
-[submodule "bash/.bashed/bash-git-prompt"]
-	path = bash/.bashed/bash-git-prompt
-	url = https://github.com/magicmonty/bash-git-prompt.git

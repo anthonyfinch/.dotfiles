@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+sudo apt install ansible
+
+ansible-playbook main.yml --connection=local --ask-become-pass

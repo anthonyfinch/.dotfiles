@@ -1,0 +1,23 @@
+[user]
+	name = Anthony Finch
+	email = actionspeakslouder@gmail.com
+[alias]
+	cp = cherry-pick
+	st = status -s
+	ci = commit
+	co = checkout
+	br = branch 
+	diff = diff --word-diff
+	dc = diff --cached
+ 	trim = !bash -c 'git branch --merged | grep -v \\* | xargs -n 1 git branch -d'
+[core]
+	excludesfile = ~/.gitignore
+	quotepath = false
+[rerere]
+	enabled = true
+[push]
+	default = simple
+[magit]
+	hideCampaign = true
+[github]
+	user = anthonyfinch
