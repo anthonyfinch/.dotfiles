@@ -1,7 +1,16 @@
 ---
 
 - hosts: 127.0.0.1
+  vars:
+    username: tiger
   tasks:
+    - name: configure user
+      become: true
+      user:
+        name: "{{ username }}"
+        group: tiger
+        groups: docker
+        append: yes
     - name: update apt
       become: yes
       apt:
@@ -15,6 +24,7 @@
       with_items:
         - git
         - vim
+        - net-tools
         - emacs
         - pass
         - feh
@@ -28,7 +38,14 @@
         - gnome-tweak-tool
         - redshift-gtk
         - virtualbox
+        - docker.io
+        - haskell-stack
+        - silversearcher-ag
         - vagrant
+    - name: setup docker group
+      group:
+        name: docker  # run exec su -l $USER to use this without logout
+        state: present
     - name: install spotify
       become: true
       command: snap install spotify
@@ -68,6 +85,12 @@
       git: 
         repo: https://github.com/pyenv/pyenv
         dest:  ~/.pyenv
+    - name: install pyenv plugins
+      git: 
+        repo: "https://github.com/pyenv/{{ item }}"
+        dest:  "~/.pyenv/plugins/{{ item }}"
+      with_items:
+        - pyenv-virtualenv
     - name: install pyenv packages (for building pythons)
       become: yes
       apt:
@@ -78,6 +101,10 @@
         - libssl-dev
         - libsqlite3-dev
         - libbz2-dev
+    - name: install nvm 
+      git: 
+        repo: https://github.com/creationix/nvm
+        dest:  ~/.nvm
     - name: install general dotfiles
       file:
         src: "{{ playbook_dir }}/files/{{ item.src }}"

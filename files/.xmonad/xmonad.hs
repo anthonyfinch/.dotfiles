@@ -3,6 +3,7 @@ import           Data.Ratio                   ((%))
 import           Graphics.X11.ExtraTypes.XF86
 import           XMonad
 import           XMonad.Actions.Plane
+import           XMonad.Actions.DynamicProjects
 import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.EwmhDesktops hiding (fullscreenEventHook)
 import           XMonad.Hooks.FadeInactive
@@ -38,7 +39,7 @@ myNormalBorderColor  = "#002b36"
 myFocusedBorderColor = "#dc322f"
 myBorderWidth        = 0
 mySpacing            = 0
-myTerminal           = "gnome-terminal"
+myTerminal           = "gnome-terminal -- tmux"
 myBrowser            = "firefox"
 
 {-
@@ -54,6 +55,8 @@ myWorkspaces =
     "Etc",
     "Draw"
   ]
+
+myProjects = []
 
 startupWorkspace = "Hub"
 
@@ -93,11 +96,10 @@ myLayouts =
 
 centralFloat = customFloating (W.RationalRect 0.25 0.25 0.5 0.5)
 
-scratchpads = [ NS "term" (myTerminal ++ " --class=scratchterm -- tmux") (className =? "scratchterm") centralFloat
+scratchpads = [ NS "term" "gnome-terminal --class=scratchterm -- tmux" (className =? "scratchterm") centralFloat
               , NS "notes" "emacsclient -c --create-frame --frame-parameters='(quote (name . \"scratchnotes\"))' ~/org/inbox.org" (resource =? "scratchnotes") centralFloat
               , NS "capture" "emacsclient -n -e '(make-capture-frame)'" (resource =? "capture") centralFloat
-              , NS "agenda" "emacsclient -n -e '(make-agenda-frame)'" (resource =? "agenda-scratch") centralFloat
-              , NS "music" "chromium-browser --app=http://localhost:6680/iris/" (resource =? "localhost__iris") doFullFloat ]
+              , NS "agenda" "emacsclient -n -e '(make-agenda-frame)'" (resource =? "agenda-scratch") centralFloat ]
 
 
 myKeyBindings =
@@ -119,6 +121,7 @@ myKeyBindings =
     , ((myModMask .|. shiftMask , xK_m), namedScratchpadAction scratchpads "music")
     , ((myModMask, xK_a), namedScratchpadAction scratchpads "agenda")
     , ((myModMask, xK_x), namedScratchpadAction scratchpads "term")
+    , ((myModMask, xK_slash), switchProjectPrompt myXPConfig)
     -- useful to check /usr/include/X11/XF86keysym.h for these:
     , ((0, 0x1008FF12), spawn "amixer -D pulse sset Master toggle")
     , ((0, 0x1008FF11), spawn "amixer -D pulse sset Master 10%-")
@@ -151,7 +154,7 @@ myStartupHook = do
   Main!
 -}
 main = do
-  xmonad $ ewmh $ fullscreenSupport $ withUrgencyHook NoUrgencyHook $ def {
+  xmonad $ dynamicProjects myProjects $ ewmh $ fullscreenSupport $ withUrgencyHook NoUrgencyHook $ def {
     focusedBorderColor = myFocusedBorderColor
   , normalBorderColor = myNormalBorderColor
   , terminal = myTerminal

@@ -1,5 +1,43 @@
 ---
 
 - hosts: 127.0.0.1
+  vars:
+    - cloud_sdk_repo: cloud-sdk-bionic  # distro + version specific
+    - minikube_version: 0.27.0
+    - helm_version: 2.9.1
   tasks:
-    - name: download gcloud sdk
+    - name: add cloud sdk repo key
+      become: true
+      apt_key:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+        state: present
+    - name: add cloud sdk repo
+      become: true
+      apt_repository:
+        repo: "deb http://packages.cloud.google.com/apt {{ cloud_sdk_repo }} main" 
+        state: present
+    - name: install gcloud packages
+      become: true
+      apt:
+        name: "{{ item }}"
+        update_cache: true
+        state: present
+      with_items:
+        - google-cloud-sdk
+        - kubectl
+    - name: install minikube binary
+      become: true
+      get_url:
+        url: "https://storage.googleapis.com/minikube/releases/v{{ minikube_version }}/minikube-linux-amd64"
+        dest: /usr/local/bin/minikube
+        mode: a+x
+    - name: install helm binary
+      become: true
+      unarchive:
+        src: https://storage.googleapis.com/kubernetes-helm/helm-v{{ helm_version}}-linux-amd64.tar.gz
+        remote_src: true
+        dest: /usr/local/bin/helm
+        exclude:
+          - LICENSE
+          - README.md
+        mode: a+x
